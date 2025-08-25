@@ -1,19 +1,24 @@
 package com.crediya.common.api;
 
+import com.crediya.common.exc.BaseException;
+
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.Objects;
 
 public class ApiException {
   private String type;
   private String message;
   private Timestamp timestamp;
+  private Map<String, String> body;
 
   public ApiException() {}
 
-  private ApiException(RuntimeException exception) {
+  private ApiException(BaseException exception) {
     this.type = formatName(exception.getClass().getSimpleName());
     this.message = exception.getMessage();
     this.timestamp = new Timestamp(System.currentTimeMillis());
+    this.body = exception.getBody();
   }
 
   public String getType() {
@@ -28,7 +33,11 @@ public class ApiException {
     return this.timestamp;
   }
 
-  public static ApiException of(RuntimeException exception) {
+  public Map<String, String> getBody() {
+    return this.body;
+  }
+
+  public static ApiException of(BaseException exception) {
     return new ApiException(exception);
   }
 
