@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 group = 'com.crediya'
@@ -11,4 +12,12 @@ repositories {
 
 dependencies {
     api 'org.modelmapper:modelmapper:3.2.0'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
