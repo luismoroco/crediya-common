@@ -11,14 +11,14 @@ public class Mapper {
   public Mapper(ModelMapper mapper) {
     this.mapper = mapper;
 
-    if (Objects.nonNull(instance)) {
+    if (Objects.nonNull(Mapper.instance)) {
       return;
     }
     Mapper.instance = this;
   }
 
   public static Mapper get() {
-    return instance;
+    return Mapper.instance;
   }
 
   public <TSource, TTarget> TTarget map(TSource source, Class<TTarget> targetClass) {
