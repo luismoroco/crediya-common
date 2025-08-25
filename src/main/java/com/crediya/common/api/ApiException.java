@@ -10,7 +10,7 @@ public class ApiException {
 
   public ApiException() {}
 
-  public ApiException(RuntimeException exception) {
+  private ApiException(RuntimeException exception) {
     this.type = formatName(exception.getClass().getSimpleName());
     this.message = exception.getMessage();
     this.timestamp = new Timestamp(System.currentTimeMillis());
@@ -26,6 +26,10 @@ public class ApiException {
 
   public Timestamp getTimestamp() {
     return this.timestamp;
+  }
+
+  public static ApiException of(RuntimeException exception) {
+    return new ApiException(exception);
   }
 
   private static String formatName(String name) {
