@@ -6,4 +6,8 @@ public class NotFoundException extends BaseException {
   public NotFoundException(String message, Map<String, String> body) {
     super(message, body);
   }
+
+  public NotFoundException(String message) {
+    super(message);
+  }
 }

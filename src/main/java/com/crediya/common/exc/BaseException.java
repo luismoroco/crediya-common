@@ -9,7 +9,11 @@ public class BaseException extends RuntimeException {
 
   public BaseException(String message, Map<String, String> body) {
     super(message);
-    this.body = Optional.ofNullable(body).orElse(new HashMap<>());
+    this.body = body;
+  }
+
+  public BaseException(String message) {
+    this(message, new HashMap<>());
   }
 
   public Map<String, String> getBody() {
