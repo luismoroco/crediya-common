@@ -21,7 +21,7 @@ public class ObjectValidator {
     ObjectValidator.instance = this;
   }
 
-  public <TObject> Mono<TObject> validate(TObject obj) {
+  public <T> Mono<T> validate(T obj) {
     return Mono.fromCallable(() -> validator.validate(obj))
       .flatMap(violations -> violations.isEmpty()
         ? Mono.just(obj)

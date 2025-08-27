@@ -4,7 +4,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface Transaction {
-  <TObject> Mono<TObject> init(Mono<TObject> mono);
+  <T> Mono<T> init(Mono<T> mono);
 
-  <TObject> Flux<TObject> init(Flux<TObject> flux);
+  <T> Flux<T> init(Flux<T> flux);
 }
