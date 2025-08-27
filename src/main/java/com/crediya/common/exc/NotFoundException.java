@@ -3,7 +3,7 @@ package com.crediya.common.exc;
 import java.util.Map;
 
 public class NotFoundException extends BaseException {
-  public NotFoundException(String message, Map<String, String> body) {
+  public NotFoundException(String message, Map<String, Object> body) {
     super(message, body);
   }
 

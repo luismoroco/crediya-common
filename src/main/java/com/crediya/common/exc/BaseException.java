@@ -2,12 +2,11 @@ package com.crediya.common.exc;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class BaseException extends RuntimeException {
-  private final Map<String, String> body;
+  private final Map<String, Object> body;
 
-  public BaseException(String message, Map<String, String> body) {
+  public BaseException(String message, Map<String, Object> body) {
     super(message);
     this.body = body;
   }
@@ -16,7 +15,7 @@ public class BaseException extends RuntimeException {
     this(message, new HashMap<>());
   }
 
-  public Map<String, String> getBody() {
+  public Map<String, Object> getBody() {
     return body;
   }
 }

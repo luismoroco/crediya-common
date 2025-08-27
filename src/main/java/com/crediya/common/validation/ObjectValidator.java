@@ -1,6 +1,6 @@
 package com.crediya.common.validation;
 
-import com.crediya.common.exc.BadRequestException;
+import com.crediya.common.exc.ValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import reactor.core.publisher.Mono;
@@ -25,7 +25,7 @@ public class ObjectValidator {
     return Mono.fromCallable(() -> validator.validate(obj))
       .flatMap(violations -> violations.isEmpty()
         ? Mono.just(obj)
-        : Mono.error(new BadRequestException(
+        : Mono.error(new ValidationException(
           "Validation error",
           violations.stream()
             .collect(Collectors.toMap(
