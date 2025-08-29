@@ -1,7 +1,7 @@
 package com.crediya.common.validation;
 
 import com.crediya.common.EmailUtils;
-import com.crediya.common.ErrorCode;
+import com.crediya.common.LogCatalog;
 import com.crediya.common.PhoneUtils;
 import com.crediya.common.exc.ValidationException;
 
@@ -17,7 +17,7 @@ public class ValidatorUtils {
 
   public static Mono<Void> string(String entityName, String value) {
     if (Objects.isNull(value) || value.isBlank()) {
-      return Mono.error(new ValidationException(ErrorCode.INVALID_PARAMETER.get(entityName, value)));
+      return Mono.error(new ValidationException(LogCatalog.INVALID_PARAMETER.get(entityName, value)));
     }
 
     return Mono.empty();
@@ -25,7 +25,7 @@ public class ValidatorUtils {
 
   public static Mono<Void> phone(String entityName, String value) {
     if (!PhoneUtils.isValid(value)) {
-      return Mono.error(new ValidationException(ErrorCode.INVALID_PARAMETER.get(entityName, value)));
+      return Mono.error(new ValidationException(LogCatalog.INVALID_PARAMETER.get(entityName, value)));
     }
 
     return Mono.empty();
@@ -33,7 +33,7 @@ public class ValidatorUtils {
 
   public static Mono<Void> email(String entityName, String value) {
     if (!EmailUtils.isValid(value)) {
-      return Mono.error(new ValidationException(ErrorCode.INVALID_PARAMETER.get(entityName, value)));
+      return Mono.error(new ValidationException(LogCatalog.INVALID_PARAMETER.get(entityName, value)));
     }
 
     return Mono.empty();
@@ -47,7 +47,7 @@ public class ValidatorUtils {
           return Mono.empty();
         } catch (DateTimeParseException e) {
           return Mono.error(new ValidationException(
-            ErrorCode.INVALID_PARAMETER.get(entityName, value)
+            LogCatalog.INVALID_PARAMETER.get(entityName, value)
           ));
         }
       }));
@@ -56,7 +56,7 @@ public class ValidatorUtils {
   public static Mono<Void> nonNull(String entityName, Object value) {
     if (Objects.isNull(value)) {
       return Mono.error(new ValidationException(
-        ErrorCode.INVALID_PARAMETER.get(entityName, null)
+        LogCatalog.INVALID_PARAMETER.get(entityName, null)
       ));
     }
     return Mono.empty();
@@ -71,7 +71,7 @@ public class ValidatorUtils {
     return nonNull(entityName, value)
       .then(Mono.defer(() -> {
         if (value.compareTo(start) < 0 || value.compareTo(end) > 0) {
-          return Mono.error(new ValidationException(ErrorCode.INVALID_PARAMETER.get(entityName, value)));
+          return Mono.error(new ValidationException(LogCatalog.INVALID_PARAMETER.get(entityName, value)));
         }
 
         return Mono.empty();
