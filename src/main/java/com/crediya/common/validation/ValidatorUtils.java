@@ -1,7 +1,7 @@
 package com.crediya.common.validation;
 
 import com.crediya.common.EmailUtils;
-import com.crediya.common.LogCatalog;
+import static com.crediya.common.LogCatalog.*;
 import com.crediya.common.PhoneUtils;
 import com.crediya.common.exc.ValidationException;
 
@@ -15,66 +15,51 @@ public class ValidatorUtils {
   private ValidatorUtils() {
   }
 
-  public static Mono<Void> string(String entityName, String value) {
-    if (Objects.isNull(value) || value.isBlank()) {
-      return Mono.error(new ValidationException(LogCatalog.INVALID_PARAMETER.get(entityName, value)));
-    }
-
-    return Mono.empty();
+  public static Mono<Void> string(Object identifier, String value) {
+    return (Objects.isNull(value) || value.isBlank())
+      ? Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)))
+      : Mono.empty();
   }
 
-  public static Mono<Void> phone(String entityName, String value) {
-    if (!PhoneUtils.isValid(value)) {
-      return Mono.error(new ValidationException(LogCatalog.INVALID_PARAMETER.get(entityName, value)));
-    }
-
-    return Mono.empty();
+  public static Mono<Void> phone(Object identifier, String value) {
+    return (!PhoneUtils.isValid(value))
+      ? Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)))
+      : Mono.empty();
   }
 
-  public static Mono<Void> email(String entityName, String value) {
-    if (!EmailUtils.isValid(value)) {
-      return Mono.error(new ValidationException(LogCatalog.INVALID_PARAMETER.get(entityName, value)));
-    }
-
-    return Mono.empty();
+  public static Mono<Void> email(Object identifier, String value) {
+    return (!EmailUtils.isValid(value))
+      ? Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)))
+      : Mono.empty();
   }
 
-  public static Mono<Void> localDate(String entityName, String value) {
-    return string(entityName, value)
+  public static Mono<Void> localDate(Object identifier, String value) {
+    return string(identifier, value)
       .then(Mono.defer(() -> {
         try {
           LocalDate.parse(value);
           return Mono.empty();
         } catch (DateTimeParseException e) {
-          return Mono.error(new ValidationException(
-            LogCatalog.INVALID_PARAMETER.get(entityName, value)
-          ));
+          return Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)));
         }
       }));
   }
 
-  public static Mono<Void> nonNull(String entityName, Object value) {
-    if (Objects.isNull(value)) {
-      return Mono.error(new ValidationException(
-        LogCatalog.INVALID_PARAMETER.get(entityName, null)
-      ));
-    }
-    return Mono.empty();
+  public static Mono<Void> nonNull(Object identifier, Object value) {
+    return (Objects.isNull(value))
+      ? Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, null)))
+      : Mono.empty();
   }
 
   public static <T extends Comparable<T>> Mono<Void> numberBetween(
-    String entityName,
+    Object identifier,
     T value,
     T start,
     T end
   ) {
-    return nonNull(entityName, value)
-      .then(Mono.defer(() -> {
-        if (value.compareTo(start) < 0 || value.compareTo(end) > 0) {
-          return Mono.error(new ValidationException(LogCatalog.INVALID_PARAMETER.get(entityName, value)));
-        }
-
-        return Mono.empty();
-      }));
+    return nonNull(identifier, value)
+      .then(Mono.defer(() -> (value.compareTo(start) < 0 || value.compareTo(end) > 0)
+        ? Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)))
+        : Mono.empty()));
   }
 }
