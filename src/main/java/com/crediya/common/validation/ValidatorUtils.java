@@ -62,4 +62,11 @@ public class ValidatorUtils {
         ? Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)))
         : Mono.empty()));
   }
+
+  public static <T extends Comparable<T>> Mono<Void> greaterOrEqualThan(Object identifier, T value, T start) {
+    return nonNull(identifier, value)
+      .then(Mono.defer(() -> (start.compareTo(value) > 0)
+        ? Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)))
+        : Mono.empty()));
+  }
 }
