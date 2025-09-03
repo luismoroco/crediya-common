@@ -2,12 +2,14 @@ package com.crediya.common.validation;
 
 import com.crediya.common.EmailUtils;
 import static com.crediya.common.LogCatalog.*;
+
 import com.crediya.common.PhoneUtils;
 import com.crediya.common.exc.ValidationException;
 
 import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Objects;
 
 public class ValidatorUtils {
@@ -68,5 +70,33 @@ public class ValidatorUtils {
       .then(Mono.defer(() -> (start.compareTo(value) > 0)
         ? Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)))
         : Mono.empty()));
+  }
+
+  public static <E extends Enum<E>> Mono<Void> enumValueOf(Object identifier, String value, Class<E> enumType) {
+    return string(identifier, value)
+      .then(Mono.defer(() -> {
+        try {
+          Enum.valueOf(enumType, value);
+          return Mono.empty();
+        } catch (IllegalArgumentException e) {
+          return Mono.error(new ValidationException(INVALID_PARAMETER.of(identifier, value)));
+        }
+      }));
+  }
+
+  public static <E extends Enum<E>> Mono<Void> enumsValueOf(Object identifier, List<String> values, Class<E> enumType) {
+    return nonNull(identifier, values)
+      .then(Mono.defer(() -> {
+        for (String value : values) {
+          try {
+            Enum.valueOf(enumType, value);
+          } catch (IllegalArgumentException ex) {
+            return Mono.error(new ValidationException(
+              INVALID_PARAMETER.of(identifier, value)
+            ));
+          }
+        }
+        return Mono.empty();
+      }));
   }
 }
