@@ -30,9 +30,18 @@ public class GlobalExceptionFilter implements HandlerFilterFunction<ServerRespon
                                      @NonNull HandlerFunction<ServerResponse> next) {
     return next.handle(request)
       .onErrorResume(RuntimeException.class, ex -> {
-        HttpStatus status = EXCEPTION_MAP.getOrDefault(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR);
+        HttpStatus status = resolveStatus(ex);
         return ServerResponse.status(status)
           .bodyValue(ApiException.of(ex));
       });
+  }
+
+
+  private static HttpStatus resolveStatus(RuntimeException ex) {
+    return EXCEPTION_MAP.entrySet().stream()
+      .filter(entry -> entry.getKey().isInstance(ex))
+      .map(Map.Entry::getValue)
+      .findFirst()
+      .orElse(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
