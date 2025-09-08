@@ -1,10 +1,7 @@
 package com.crediya.common.api.handling;
 
 import com.crediya.common.api.ApiException;
-import com.crediya.common.exc.BadRequestException;
-import com.crediya.common.exc.BaseException;
-import com.crediya.common.exc.NotFoundException;
-import com.crediya.common.exc.ValidationException;
+import com.crediya.common.exc.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.web.reactive.function.server.HandlerFilterFunction;
@@ -21,7 +18,8 @@ public class GlobalExceptionFilter implements HandlerFilterFunction<ServerRespon
     Map.of(
       BadRequestException.class, HttpStatus.BAD_REQUEST,
       NotFoundException.class, HttpStatus.NOT_FOUND,
-      ValidationException.class, HttpStatus.BAD_REQUEST
+      ValidationException.class, HttpStatus.BAD_REQUEST,
+      UnauthorizedException.class, HttpStatus.UNAUTHORIZED
     );
 
   @Override
