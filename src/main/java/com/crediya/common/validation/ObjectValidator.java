@@ -1,6 +1,6 @@
 package com.crediya.common.validation;
 
-import com.crediya.common.exc.ValidationException;
+import com.crediya.common.validation.exc.ValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import reactor.core.publisher.Mono;

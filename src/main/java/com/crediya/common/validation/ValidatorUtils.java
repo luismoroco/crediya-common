@@ -4,7 +4,7 @@ import com.crediya.common.EmailUtils;
 import static com.crediya.common.LogCatalog.*;
 
 import com.crediya.common.PhoneUtils;
-import com.crediya.common.exc.ValidationException;
+import com.crediya.common.validation.exc.ValidationException;
 
 import reactor.core.publisher.Mono;
 import java.time.LocalDate;
